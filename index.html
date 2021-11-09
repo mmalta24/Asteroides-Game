@@ -4,9 +4,86 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Asteroides</title>
 </head>
 <body>
-    teste
+    <canvas id="myCanvas">Your browser does not support the HTML5 canvas tag. </canvas>
+	<div class="aa">
+		<h1>Asteroides</h1>
+		<button id="btn">Play</button>
+		<button>Quit</button>
+	</div>
+	<script>
+		var canvas = document.getElementById('myCanvas')
+        //set canvas in full page
+        canvas.width  = window.innerWidth;
+        canvas.height = window.innerHeight
+		var ctx = canvas.getContext('2d');
+        //load page
+		var numberOfSides = 8;
+		var radius=60;
+		var x = 125;
+		var y = 125;
+		var angle = 2*Math.PI/numberOfSides;
+ 		ctx.beginPath();
+		ctx.translate(x, y);
+		ctx.moveTo(radius, 0);          
+ 		for (var i=1; i<=numberOfSides; i++) {
+			 ctx.lineTo(radius*Math.cos(i * angle), radius*Math.sin(i * angle));
+		}
+        ctx.strokeStyle="white"
+		ctx.lineWidth=3
+ 		ctx.stroke();
+
+		let btn=document.querySelector("#btn")
+		btn.addEventListener("click",function(){
+			alert('OK')
+		})  
+	</script>
+    <style>
+        canvas{
+            background-image: url('https://i.ytimg.com/vi/y2_2Lcl5Iow/maxresdefault.jpg');
+            position: fixed;
+            top:0px;
+            left: 0px;
+        }
+		body{
+			width:98vw;
+			height: 96vh;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			user-select: none;
+		}
+		.aa{
+			z-index: 1;
+			position: relative;
+			color:white;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			background-color: rgba(255, 255, 255, 0.116);
+			padding: 2%;
+			border-radius: 2%;
+			width:25vw
+		}
+		.aa, h1,button{
+			margin:6%
+		}
+		.aa h1{
+			font-family: "Bauhaus 93";
+			font-size: 50px;
+		}
+		.aa button{
+			background-color: white;
+			font-weight: bold;
+			border:none;
+			width: 50%;
+			height: 5vh;
+			border-radius: 2%;
+			font-size: 20px;
+		}
+    </style>
 </body>
 </html>
