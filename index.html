@@ -11,7 +11,7 @@
 	<div class="aa">
 		<h1>Asteroides</h1>
 		<button id="btn">Play</button>
-		<button>Quit</button>
+		<button id="btnclose">Quit</button>
 	</div>
 	<script>
 		var canvas = document.getElementById('myCanvas')
@@ -163,7 +163,11 @@
 		let btn=document.querySelector("#btn")
 		btn.addEventListener("click",function(){
 			alert('OK')
-		})  
+		}) 
+        let btnClose=document.querySelector("#btnclose")
+        btnClose.addEventListener("click",function(){
+            window.close()
+        }) 
 	</script>
     <style>
         canvas{
