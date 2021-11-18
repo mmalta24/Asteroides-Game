@@ -41,74 +41,16 @@
                 ctx.strokeStyle = this.c;
                 var numberOfSides = 8;
                 var angle = 2 * Math.PI / numberOfSides;
-
                 ctx.save()
                 ctx.beginPath();
                 ctx.translate(this.x, this.y);
+                ctx.rotate(angleS * Math.PI / 180)
                 ctx.moveTo(this.R, 0);
                 for (var i = 1; i <= numberOfSides; i++) {
                     ctx.lineTo(this.R * Math.cos(i * angle), this.R * Math.sin(i * angle));
                 }
                 ctx.lineWidth = 3
                 ctx.stroke()
-
-                ctx.restore()
-            }
-
-            update() {
-                // check Canvas vertical collisions
-                if (this.x < this.R || this.x > W - this.R)
-                    this.dX = +this.dX;
-                // check Canvas horizontal collisions
-                if (this.y < this.R || this.y > H - this.R)
-                    this.dY = -this.dY;
-                this.x += this.dX; // update horizontal position
-                this.y += this.dY; // update vertical position
-            }
-        }
-        let b = new Array();
-        let list = [60, 30] // setup as many balls as wanted
-        for (let i = 0; i < 2; i++) {
-            let x = Math.floor(Math.random() * (1 - 0 + 1)) + 0;
-            let radius = list[x]
-            let color = `black`; // randomcolor
-            // randomposition (inside Canvas)
-            let xInit = 20 + Math.random() * (W - 2 * 20);
-            let yInit = 20 + Math.random() * (H - 2 * 20);
-            // randomdirection
-            let direction = Math.random() * 2 * Math.PI;
-            b.push(new Ball(xInit, yInit, radius, direction, color))
-        }
-
-        function render() {
-            // fade Canvas
-            class Ball {
-            constructor(x, y, r, d, c) { // CONSTRUCTOR
-                this.x = x; // initial X position
-                this.y = y; // initial Y position
-                // (constant) horizontal displacement(velocity): d is a direction angle
-                this.dX = 2 * Math.cos(d);
-                // (constant) vertical displacement (velocity): d is a direction angle
-                this.dY = 2 * Math.sin(d);
-                this.c = c; // color
-                this.R = r; // circle radius(constant)
-            }
-
-            draw() {
-                ctx.strokeStyle = this.c;
-                var numberOfSides = 8;
-                var angle = 2 * Math.PI / numberOfSides;
-
-                ctx.save()
-                ctx.beginPath();
-                ctx.translate(this.x, this.y);
-                ctx.moveTo(this.R, 0);
-                for (var i = 1; i <= numberOfSides; i++) {
-                    ctx.lineTo(this.R * Math.cos(i * angle), this.R * Math.sin(i * angle));
-                }
-                ctx.lineWidth = 3
-                ctx.stroke()
-
                 ctx.restore()
             }
 
@@ -136,6 +78,7 @@
             let direction = Math.random() * 2 * Math.PI;
             b.push(new Ball(xInit, yInit, radius, direction, color))
         }
+        let angleS=0
 
         function render() {
             // fade Canvas
@@ -147,15 +90,7 @@
                 ball.draw();
                 ball.update();
             });
-            //new frame
-            window.requestAnimationFrame(render);
-        }
-        render(); //startthe animation
-            // draw & update
-            b.forEach(ball => {
-                ball.draw();
-                ball.update();
-            });
+            angleS++;
             //new frame
             window.requestAnimationFrame(render);
         }
