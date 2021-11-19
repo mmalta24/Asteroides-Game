@@ -25,7 +25,7 @@
 		img.src = 'https://i.ytimg.com/vi/y2_2Lcl5Iow/maxresdefault.jpg';
 		ctx.drawImage(img, 0, 0,W,H);
         //load page
-		class Ball {
+		class Asteroides {
             constructor(x, y, r, d, c) { // CONSTRUCTOR
                 this.x = x; // initial X position
                 this.y = y; // initial Y position
@@ -55,19 +55,27 @@
             }
 
             update() {
-                // check Canvas vertical collisions
-                if (this.x < this.R || this.x > W - this.R)
-                    this.dX = +this.dX;
+               // check Canvas vertical collisions
+                if (this.x < -this.R)
+                    this.x = W + this.R;
+
+                if (this.x > W + this.R)
+                    this.x = -this.R;
+
                 // check Canvas horizontal collisions
-                if (this.y < this.R || this.y > H - this.R)
-                    this.dY = -this.dY;
+                if (this.y < -this.R)
+                    this.y = H + this.R;
+
+                if (this.y > H + this.R)
+                    this.y = -this.R;
+
                 this.x += this.dX; // update horizontal position
                 this.y += this.dY; // update vertical position
             }
         }
-        let b = new Array();
+        let a = new Array();
         let list = [60, 30] // setup as many balls as wanted
-        for (let i = 0; i < 50; i++) {
+        for (let i = 0; i < 25; i++) {
             let x = Math.floor(Math.random() * (1 - 0 + 1)) + 0;
             let radius = list[x]
             let color = `white`; // randomcolor
@@ -76,7 +84,7 @@
             let yInit = 20 + Math.random() * (H - 2 * 20);
             // randomdirection
             let direction = Math.random() * 2 * Math.PI;
-            b.push(new Ball(xInit, yInit, radius, direction, color))
+            a.push(new Asteroides(xInit, yInit, radius, direction, color))
         }
         let angleS=0
 
@@ -86,9 +94,9 @@
             ctx.drawImage(img, 0, 0,W,H);
             ctx.fillRect(0, 0, W, H);
             // draw & update
-            b.forEach(ball => {
-                ball.draw();
-                ball.update();
+            a.forEach(asteroide => {
+                asteroide.draw();
+                asteroide.update();
             });
             angleS++;
             //new frame
