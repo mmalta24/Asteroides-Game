@@ -29,10 +29,19 @@
             constructor(x, y, r, d, c) { // CONSTRUCTOR
                 this.x = x; // initial X position
                 this.y = y; // initial Y position
-                // (constant) horizontal displacement(velocity): d is a direction angle
-                this.dX = 2 * Math.cos(d);
-                // (constant) vertical displacement (velocity): d is a direction angle
-                this.dY = 2 * Math.sin(d);
+                if(r=="60"){
+                     // (constant) horizontal displacement(velocity): d is a direction angle
+                    this.dX = 2 * Math.cos(d);
+                    // (constant) vertical displacement (velocity): d is a direction angle
+                    this.dY = 2 * Math.sin(d);
+                }
+                else{
+                     // (constant) horizontal displacement(velocity): d is a direction angle
+                    this.dX = 5 * Math.cos(d);
+                    // (constant) vertical displacement (velocity): d is a direction angle
+                    this.dY = 5 * Math.sin(d);
+                }
+               
                 this.c = c; // color
                 this.R = r; // circle radius(constant)
             }
@@ -44,7 +53,13 @@
                 ctx.save()
                 ctx.beginPath();
                 ctx.translate(this.x, this.y);
-                ctx.rotate(angleS * Math.PI / 180)
+                if(this.R=="60"){
+                    ctx.rotate(angleS * Math.PI / 180)
+                }
+                else{
+                    ctx.rotate(angleS*Math.PI/40)
+                }
+                
                 ctx.moveTo(this.R, 0);
                 for (var i = 1; i <= numberOfSides; i++) {
                     ctx.lineTo(this.R * Math.cos(i * angle), this.R * Math.sin(i * angle));
