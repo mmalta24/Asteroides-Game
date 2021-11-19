@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Asteroides</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <canvas id="myCanvas">Your browser does not support the HTML5 canvas tag. </canvas>
@@ -53,6 +54,7 @@
                 ctx.save()
                 ctx.beginPath();
                 ctx.translate(this.x, this.y);
+                //rotation of asteroides
                 if(this.R=="60"){
                     ctx.rotate(angleS * Math.PI / 180)
                 }
@@ -89,11 +91,11 @@
             }
         }
         let a = new Array();
-        let list = [60, 30] // setup as many balls as wanted
+        let list = [60, 30] 
         for (let i = 0; i < 25; i++) {
             let x = Math.floor(Math.random() * (1 - 0 + 1)) + 0;
             let radius = list[x]
-            let color = `white`; // randomcolor
+            let color = `white`;
             // randomposition (inside Canvas)
             let xInit = 20 + Math.random() * (W - 2 * 20);
             let yInit = 20 + Math.random() * (H - 2 * 20);
@@ -127,49 +129,5 @@
             window.close()
         }) 
 	</script>
-    <style>
-        canvas{
-            position: fixed;
-            top:0px;
-            left: 0px;
-        }
-		body{
-			width:98vw;
-			height: 96vh;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			user-select: none;
-		}
-		.aa{
-			z-index: 1;
-			position: relative;
-			color:white;
-			display: flex;
-			flex-direction: column;
-			justify-content: center;
-			align-items: center;
-			background-color: rgba(255, 255, 255, 0.116);
-			padding: 2%;
-			border-radius: 2%;
-			width:25vw
-		}
-		.aa, h1,button{
-			margin:6%
-		}
-		.aa h1{
-			font-family: "Bauhaus 93";
-			font-size: 50px;
-		}
-		.aa button{
-			background-color: white;
-			font-weight: bold;
-			border:none;
-			width: 50%;
-			height: 5vh;
-			border-radius: 2%;
-			font-size: 20px;
-		}
-    </style>
 </body>
 </html>
