@@ -127,8 +127,11 @@
                 angleSNav++ ;
                 if (leftKey && this.x - this.r > -this.r)
                 angleSNav--;
-                if (upKey && this.y - this.r > -this.r)
-                this.y--;
+                if (upKey )
+                {
+                    this.x += 2 * Math.cos(angleSNav* Math.PI / 180 - Math.PI/2)
+                    this.y += 2 * Math.sin(angleSNav* Math.PI / 180 - Math.PI/2)
+                }
             }
 
         }
