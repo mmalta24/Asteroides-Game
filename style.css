@@ -40,3 +40,18 @@ body{
     border-radius: 2%;
     font-size: 20px;
 }
+.submenu{
+    z-index: 1;
+    position: fixed;
+    top:0px;
+    left:0px;
+    color:white;
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.116);
+    padding: 0.2%;
+    border-radius: 2%;
+    width:15vw
+}
