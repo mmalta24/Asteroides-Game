@@ -48,10 +48,28 @@ body{
     color:white;
     display: flex;
     flex-direction: row;
-    justify-content: start;
+    justify-content: center;
     align-items: center;
     background-color: rgba(255, 255, 255, 0.116);
-    padding: 0.2%;
+    
+    border-radius: 4%;
+    width:20vw
+}
+.submenu button{
+    background-color: white;
+    border:none;
+    width:15%;
+    text-align: center;
+    padding: 2%;
     border-radius: 2%;
-    width:15vw
+    font-size: 20px;
+}
+.submenu div{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    font-size: 30px;
+    width:50%;
+    margin-right: 2%;
+    
 }

@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Asteroides</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
 </head>
 <body>
     <canvas id="myCanvas">Your browser does not support the HTML5 canvas tag. </canvas>
@@ -15,9 +16,12 @@
 		<button id="btnclose">Quit</button>
 	</div>
     <div class="submenu" style="visibility:hidden">
-        <button>||</button>
-        <button>Restart</button>
-        <button>X</button>
+        <button><i class="fas fa-redo-alt"></i></button>
+        <button><i class="fas fa-times"></i></button>
+        <div>
+        <span><i class="fas fa-heart"></i><span> 0 </span></span>
+        <span>  <i class="fas fa-trophy"></i><span> 0</span></span>
+        </div>
     </div>
 	<script>
 		var canvas = document.getElementById('myCanvas')
@@ -31,7 +35,7 @@
 		img.src = 'https://i.ytimg.com/vi/y2_2Lcl5Iow/maxresdefault.jpg';
 		ctx.drawImage(img, 0, 0,W,H);
         //set keys value
-        let rightKey = false, leftKey = false, upKey = false, downKey = false;
+        let rightKey = false, leftKey = false, upKey = false, downKey = false, spaceKey=false;
         //load page
 		class Asteroides {
             constructor(x, y, r, d, c) { // CONSTRUCTOR
@@ -95,6 +99,7 @@
 
                 this.x += this.dX; // update horizontal position
                 this.y += this.dY; // update vertical position
+
             }
         }
         class Nav{
@@ -108,7 +113,7 @@
             drawN() {
                 ctx.strokeStyle = this.c;
                 var numberOfSidesNav = 3;
-		        var angleNav = 2*Math.PI/numberOfSidesNav;
+		        var angleNav = 4*Math.PI/numberOfSidesNav;
                 ctx.save()
                 ctx.beginPath();
                 ctx.translate(this.x, this.y);
@@ -129,14 +134,47 @@
                 angleSNav--;
                 if (upKey )
                 {
-                    this.x += 2 * Math.cos(angleSNav* Math.PI / 180 - Math.PI/2)
-                    this.y += 2 * Math.sin(angleSNav* Math.PI / 180 - Math.PI/2)
+                    this.x += 4 * Math.cos(angleSNav* Math.PI / 180 - Math.PI/2)
+                    this.y += 4 * Math.sin(angleSNav* Math.PI / 180 - Math.PI/2)
                 }
             }
 
         }
+        class Bullets{
+            constructor(x,y,r,d){
+                this.x=x;
+                this.y=y;
+                this.dX=2*Math.cos(d)
+                this.dY=2*Math.sin(d)
+                this.c='orange'
+                this.r=r
+            }
+            drawB(){
+                ctx.fillStyle=this.c
+                ctx.beginPath()
+                ctx.arc(this.x,this.y, this.r, 0, 2 * Math.PI)
+                ctx.fill();
+            }
+            updateB(){
+                if(this.x<-this.r)
+                    b=b.filter(ball=>ball.x!=this.x);
+                if (this.x > W + this.r)
+                    b=b.filter(ball=>ball.x!=this.x);
+
+                // check Canvas horizontal collisions
+                if (this.y < -this.r)
+                    b=b.filter(ball=>ball.x!=this.x);
+                if (this.y > H + this.r)
+                    b=b.filter(ball=>ball.x!=this.x);
+
+                this.x += this.dX; // update horizontal position
+                this.y += this.dY; // update vertical position
+
+            }
+        }
         let a = new Array();
-        let n= new Array()
+        let n= new Array();
+        let b=new Array()
         let list = [60, 30] 
         for (let i = 0; i < 25; i++) {
             let x = Math.floor(Math.random() * (1 - 0 + 1)) + 0;
@@ -156,6 +194,9 @@
 			ctx.fillStyle="transparent"
             ctx.drawImage(img, 0, 0,W,H);
             ctx.fillRect(0, 0, W, H);
+
+            checkCollisions();
+            checkCollisionsShot();
             // draw & update
             a.forEach(asteroide => {
                 asteroide.draw();
@@ -165,6 +206,10 @@
             n.forEach(nav => {
                 nav.drawN();
                 nav.updateN();
+            });
+            b.forEach(bullet => {
+                bullet.drawB();
+                bullet.updateB();
             });
             
             angleS++;
@@ -187,6 +232,8 @@
         function startGame(){
             let menu=document.querySelector(".menu")
             menu.style.visibility='hidden'
+            let submenu=document.querySelector(".submenu")
+            submenu.style.visibility='visible'
             //set events for keys
             window.addEventListener('keydown', e => {
             if (e.key == 'ArrowRight')
@@ -198,7 +245,9 @@
                 downKey = true;
             if (e.key == 'ArrowUp')
                 upKey = true;
-
+            if (e.key == ' ')
+                createBullet()
+            
             e.preventDefault();
             });
 
@@ -230,8 +279,89 @@
             }
             angleS=0
             n.push(new Nav (W/2,H/2,30,'orange'))
-
         }
+        function checkCollision(a, n) {
+        // verifica colisão entre 1 inimigo e 1 bala
+        var dx = (a.x + a.R) - (n.x + n.r);
+        var dy = (a.y + a.R) - (n.y + n.r);
+        var distance = Math.sqrt(dx * dx + dy * dy);
+
+        if (distance < a.R + n.r) {
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+        function checkCollisions() {
+            //percorre o array de inimigos 
+            for (let i = 0; i < a.length; i++) {
+                //percorre o array de balas 
+                for (let j = 0; j <n.length; j++)
+                    //verifica se há colisão entre dois objetos (1 inimigo e 1 bala)
+                    if (checkCollision(a[i], n[j])) {
+                        //sinaliza futura remoção da bala
+                        n=[]
+                    }
+            }
+        }
+        //have some problems
+        function createBullet(){
+            let xBullet=n[0].x
+            let yBullet=n[0].y-20
+            let radiusBullet=5
+            let directionBullet = angleSNav * Math.PI / 180;
+            //console.log(directionBullet);
+            b.push(new Bullets(xBullet,yBullet,radiusBullet,directionBullet))
+        }
+        //check colisions between asteroide and shot
+        function checkCollisionShot(asteroide, bullet) {
+        
+        var dx = (asteroide.x + asteroide.R) - (bullet.x + bullet.r);
+        var dy = (asteroide.y + asteroide.R) - (bullet.y + bullet.r);
+        var distance = Math.sqrt(dx * dx + dy * dy);
+
+        if (distance < asteroide.R + bullet.r) {
+            b=b.filter(b=>b.x!=bullet.x);
+            a=a.filter(a=>a.x!=asteroide.x)
+        }
+    }
+
+        function checkCollisionsShot() {
+            //percorre o array de inimigos 
+            for (let i = 0; i < a.length; i++) {
+                //percorre o array de balas 
+                for (let j = 0; j <b.length; j++)
+                checkCollisionShot(a[i], b[j])
+            }
+        }
+
+        //check colisions between 2 asteroides
+        function checkCollisionAsteroide(asteroide1, asteroide2) {
+        
+        var dx = (asteroide1.x + asteroide1.R) - (asteroide2.x + asteroide2.R);
+        var dy = (asteroide1.y + asteroide1.R) - (asteroide2.y + asteroide2.R);
+        var distance = Math.sqrt(dx * dx + dy * dy);
+
+        if (distance < asteroide1.R + asteroide2.r) {
+            asteroide1.x-=20
+            asteroide1.y-=20 
+            asteroide2.x-=20 
+            asteroide2.y-=20
+        }
+    }
+
+        function checkCollisionsAsteroides() {
+            //percorre o array de inimigos 
+            for (let i = 0; i < a.length; i++) {
+                //percorre o array de balas 
+                for (let j = 0; j <a.length; j++)
+                checkCollisionShot(a[i], a[j])
+            }
+        }
+
+
 	</script>
 </body>
 </html>
