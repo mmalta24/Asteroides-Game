@@ -268,7 +268,7 @@
             //set asteroides
             a=new Array
             let list = [60, 30] 
-            for (let i = 0; i < 10; i++) {
+            for (let i = 0; i < 2; i++) {
             let x = Math.floor(Math.random() * (1 - 0 + 1)) + 0;
             let radius = list[x]
             let color = `white`;
@@ -325,7 +325,7 @@
         var distance = Math.sqrt(dx * dx + dy * dy);
 
         if (distance < asteroide.R + bullet.r) {
-            console.log(bullet.r);
+            console.log(asteroide.R);
             b=b.filter(b=>b.x!=bullet.x);
             a=a.filter(a=>a.x!=asteroide.x)
         }
