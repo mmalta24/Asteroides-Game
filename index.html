@@ -262,7 +262,7 @@
             if (e.key == ' ')
                 createBullet()
             if (e.key=='r')
-                n=[],b=[],a=[],startGame();
+                lifes.innerHTML=2,points.innerHTML=0,n=[],b=[],a=[],startGame();
             if (e.key=="Escape")
                 location.reload()
             e.preventDefault();
@@ -282,18 +282,22 @@
             });
             //set asteroides
             a=new Array
-            let list = [60, 30] 
-            for (let i = 0; i < 2; i++) {
-            let x = Math.floor(Math.random() * (1 - 0 + 1)) + 0;
-            let radius = list[x]
-            let color = `white`;
-            // randomposition (inside Canvas)
-            let xInit = 20 + Math.random() * (W - 2 * 20);
-            let yInit = 20 + Math.random() * (H - 2 * 20);
-            // randomdirection
-            let direction = Math.random() * 2 * Math.PI;
-            a.push(new Asteroides(xInit, yInit, radius, direction, color))
+            let list = [60, 30]
+            function createAsteroides(){ 
+                for (let i = 0; i < 5; i++) {
+                let x = Math.floor(Math.random() * (1 - 0 + 1)) + 0;
+                let radius = list[x]
+                let color = `white`;
+                // randomposition (inside Canvas)
+                let xInit = 20 + Math.random() * (W - 2 * 20);
+                let yInit = 20 + Math.random() * (H - 2 * 20);
+                // randomdirection
+                let direction = Math.random() * 2 * Math.PI;
+                a.push(new Asteroides(xInit, yInit, radius, direction, color))
+                }
             }
+            createAsteroides()
+            setInterval(createAsteroides,30000)
             angleS=0
             n.push(new Nav (W/2,H/2,30,'orange'))
         }
@@ -322,7 +326,7 @@
                         lifes.innerHTML-=1
                         if(lifes.innerHTML=="1"){
                             n=[]
-                            setInterval(n.push(new Nav (W/2,H/2,30,'orange')),40000)
+                            setTimeout(n.push(new Nav (W/2,H/2,30,'orange')),40000)
                         }
                         else if(lifes.innerHTML=="0"){
                         stopGame=true
@@ -331,7 +335,6 @@
                     }
             }
         }
-        //have some problems
         function createBullet(){
             let xBullet=n[0].x
             let yBullet=n[0].y
@@ -388,7 +391,7 @@
         function checkCollisionsAsteroides() {
             //percorre o array de inimigos 
             for (let i = 0; i < a.length; i++) {
-                //percorre o array de balas 
+                //percorre o array de inimigos 
                 for (let j = 0; j <a.length; j++)
                 checkCollisionAsteroide(a[i], a[j])
             }
