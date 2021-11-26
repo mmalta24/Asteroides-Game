@@ -40,36 +40,14 @@ body{
     border-radius: 2%;
     font-size: 20px;
 }
-.submenu{
+.submenuinfo{
     z-index: 1;
     position: fixed;
     top:0px;
     left:0px;
     color:white;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
     background-color: rgba(255, 255, 255, 0.116);
-    
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     border-radius: 4%;
-    width:20vw
-}
-.submenu button{
-    background-color: white;
-    border:none;
-    width:15%;
-    text-align: center;
-    padding: 2%;
-    border-radius: 2%;
-    font-size: 20px;
-}
-.submenu div{
-    display: flex;
-    justify-content: space-between;
-    flex-direction: row;
-    font-size: 30px;
-    width:50%;
-    margin-right: 2%;
-    
+    padding: 0.5%;
 }

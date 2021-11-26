@@ -15,13 +15,12 @@
 		<button id="btn">Play</button>
 		<button id="btnclose">Quit</button>
 	</div>
-    <div class="submenu" style="visibility:hidden">
-        <button><i class="fas fa-redo-alt"></i></button>
-        <button><i class="fas fa-times"></i></button>
-        <div>
+    <div class="submenuinfo" style="visibility:hidden">
+        <span> Press ESC to close or Press R to restart </span>
+    </div>
+    <div class="submenupoints" style="visibility:hidden">
         <span><i class="fas fa-heart"></i><span> 0 </span></span>
-        <span>  <i class="fas fa-trophy"></i><span> 0</span></span>
-        </div>
+        <span> <i class="fas fa-trophy"></i><span> 0</span></span>
     </div>
 	<script>
 		var canvas = document.getElementById('myCanvas')
@@ -174,7 +173,8 @@
         }
         let a = new Array();
         let n= new Array();
-        let b=new Array()
+        let b=new Array();
+        let stopGame=false
         let list = [60, 30] 
         for (let i = 0; i < 25; i++) {
             let x = Math.floor(Math.random() * (1 - 0 + 1)) + 0;
@@ -194,9 +194,9 @@
 			ctx.fillStyle="transparent"
             ctx.drawImage(img, 0, 0,W,H);
             ctx.fillRect(0, 0, W, H);
-
-            checkCollisions();
             checkCollisionsShot();
+            checkCollisions();
+            checkCollisionsAsteroides();
             // draw & update
             a.forEach(asteroide => {
                 asteroide.draw();
@@ -217,7 +217,7 @@
             window.requestAnimationFrame(render);
         }
         render(); //startthe animation
-
+        
         //listen events of menu
 		let btn=document.querySelector("#btn")
 		btn.addEventListener("click",function(){
@@ -232,8 +232,10 @@
         function startGame(){
             let menu=document.querySelector(".menu")
             menu.style.visibility='hidden'
-            let submenu=document.querySelector(".submenu")
-            submenu.style.visibility='visible'
+            let submenuinfo=document.querySelector(".submenuinfo")
+            submenuinfo.style.visibility='visible'
+            let submenupoints=document.querySelector(".submenupoints")
+            submenupoints.style.visibility='visible'
             //set events for keys
             window.addEventListener('keydown', e => {
             if (e.key == 'ArrowRight')
@@ -266,7 +268,7 @@
             //set asteroides
             a=new Array
             let list = [60, 30] 
-            for (let i = 0; i < 2; i++) {
+            for (let i = 0; i < 10; i++) {
             let x = Math.floor(Math.random() * (1 - 0 + 1)) + 0;
             let radius = list[x]
             let color = `white`;
@@ -323,6 +325,7 @@
         var distance = Math.sqrt(dx * dx + dy * dy);
 
         if (distance < asteroide.R + bullet.r) {
+            console.log(bullet.r);
             b=b.filter(b=>b.x!=bullet.x);
             a=a.filter(a=>a.x!=asteroide.x)
         }
@@ -357,7 +360,7 @@
             for (let i = 0; i < a.length; i++) {
                 //percorre o array de balas 
                 for (let j = 0; j <a.length; j++)
-                checkCollisionShot(a[i], a[j])
+                checkCollisionAsteroide(a[i], a[j])
             }
         }
 
