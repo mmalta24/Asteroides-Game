@@ -311,9 +311,11 @@
         //have some problems
         function createBullet(){
             let xBullet=n[0].x
-            let yBullet=n[0].y-20
+            let yBullet=n[0].y
             let radiusBullet=5
             let directionBullet = angleSNav * Math.PI / 180;
+            xBullet += Math.cos(directionBullet - Math.PI/2) *30
+            yBullet += Math.sin(directionBullet- Math.PI/2) *30
             //console.log(directionBullet);
             b.push(new Bullets(xBullet,yBullet,radiusBullet,directionBullet))
         }
