@@ -19,8 +19,8 @@
         <span> Press ESC to close or Press R to restart </span>
     </div>
     <div class="submenupoints" style="visibility:hidden">
-        <span><i class="fas fa-heart"></i><span> 0 </span></span>
-        <span> <i class="fas fa-trophy"></i><span> 0</span></span>
+        <span> <i class="fas fa-heart"></i> <span id="lifes"> 0 </span></span>
+        <span> <i class="fas fa-trophy"></i> <span id="points"> 0 </span></span>
     </div>
 	<script>
 		var canvas = document.getElementById('myCanvas')
@@ -214,7 +214,16 @@
             
             angleS++;
             //new frame
+            if (stopGame==false){
             window.requestAnimationFrame(render);
+            }
+            else{
+                ctx.fillStyle = "white";
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.font = 'bold 40px arial';
+                ctx.fillText("YOU LOST!!", W / 2, H / 2);
+            }
         }
         render(); //startthe animation
         
@@ -225,7 +234,7 @@
 		}) 
         let btnClose=document.querySelector("#btnclose")
         btnClose.addEventListener("click",function(){
-            window.close()
+            window.open("", '_self').window.close();
         }) 
         //startGame
          // on key DOWN, check if it is an arrow, and signal the corresponding flag
@@ -236,6 +245,9 @@
             submenuinfo.style.visibility='visible'
             let submenupoints=document.querySelector(".submenupoints")
             submenupoints.style.visibility='visible'
+            let lifes=document.querySelector("#lifes")
+            let points=document.querySelector("#points")
+            lifes.innerHTML=2
             //set events for keys
             window.addEventListener('keydown', e => {
             if (e.key == 'ArrowRight')
@@ -249,7 +261,10 @@
                 upKey = true;
             if (e.key == ' ')
                 createBullet()
-            
+            if (e.key=='r')
+                n=[],b=[],a=[],startGame();
+            if (e.key=="Escape")
+                location.reload()
             e.preventDefault();
             });
 
@@ -304,7 +319,15 @@
                     //verifica se há colisão entre dois objetos (1 inimigo e 1 bala)
                     if (checkCollision(a[i], n[j])) {
                         //sinaliza futura remoção da bala
+                        lifes.innerHTML-=1
+                        if(lifes.innerHTML=="1"){
+                            n=[]
+                            setInterval(n.push(new Nav (W/2,H/2,30,'orange')),40000)
+                        }
+                        else if(lifes.innerHTML=="0"){
+                        stopGame=true
                         n=[]
+                        }
                     }
             }
         }
@@ -327,7 +350,12 @@
         var distance = Math.sqrt(dx * dx + dy * dy);
 
         if (distance < asteroide.R + bullet.r) {
-            console.log(asteroide.R);
+            if(asteroide.R=="60"){
+                points.innerHTML=+points.innerHTML+30
+            }
+            else{
+                points.innerHTML=+points.innerHTML+15
+            }
             b=b.filter(b=>b.x!=bullet.x);
             a=a.filter(a=>a.x!=asteroide.x)
         }
