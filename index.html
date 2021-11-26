@@ -143,8 +143,8 @@
             constructor(x,y,r,d){
                 this.x=x;
                 this.y=y;
-                this.dX=2*Math.cos(d)
-                this.dY=2*Math.sin(d)
+                this.dX=4 * Math.cos(d - Math.PI/2)
+                this.dY=4 * Math.sin(d - Math.PI/2)
                 this.c='orange'
                 this.r=r
             }
