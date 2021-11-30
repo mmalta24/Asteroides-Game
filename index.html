@@ -132,9 +132,9 @@
             updateN(){
                 //update position
                 if (rightKey && this.x + this.r < W)
-                angleSNav+=3 ;
+                angleSNav++ ;
                 if (leftKey && this.x - this.r > -this.r)
-                angleSNav-=3;
+                angleSNav--;
                 if (upKey )
                 {
                     this.x += 4 * Math.cos(angleSNav* Math.PI / 180 - Math.PI/2)
@@ -149,8 +149,8 @@
             constructor(x,y,r,d){
                 this.x=x;
                 this.y=y;
-                this.dX=6 * Math.cos(d - Math.PI/2)
-                this.dY=6 * Math.sin(d - Math.PI/2)
+                this.dX=4 * Math.cos(d - Math.PI/2)
+                this.dY=4 * Math.sin(d - Math.PI/2)
                 this.c='orange'
                 this.r=r
             }
@@ -267,7 +267,7 @@
             if (e.key == ' ')
                 createBullet()
             if (e.key=='r')
-                lifes.innerHTML=2,points.innerHTML=0,n=[],b=[],a=[],window.cancelAnimationFrame(render),stopGame=false,window.requestAnimationFrame(render),startGame();
+                lifes.innerHTML=2,points.innerHTML=0,n=[],b=[],a=[],startGame();
             if (e.key=="Escape")
                 location.reload()
             e.preventDefault();
