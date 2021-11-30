@@ -267,7 +267,7 @@
             if (e.key == ' ')
                 createBullet()
             if (e.key=='r')
-                lifes.innerHTML=2,points.innerHTML=0,n=[],b=[],a=[],startGame();
+                lifes.innerHTML=2,points.innerHTML=0,n=[],b=[],a=[],window.cancelAnimationFrame(render),stopGame=false,window.requestAnimationFrame(render),startGame();
             if (e.key=="Escape")
                 location.reload()
             e.preventDefault();
