@@ -35,6 +35,8 @@
 		ctx.drawImage(img, 0, 0,W,H);
         //set keys value
         let rightKey = false, leftKey = false, upKey = false, downKey = false, spaceKey=false;
+        //position nav
+        let xNav=0, yNav=0
         //load page
 		class Asteroides {
             constructor(x, y, r, d, c) { // CONSTRUCTOR
@@ -124,6 +126,8 @@
                 ctx.lineWidth = 3
  		        ctx.stroke();
                 ctx.restore()
+                xNav=this.x
+                yNav=this.y
             }
             updateN(){
                 //update position
@@ -135,6 +139,8 @@
                 {
                     this.x += 4 * Math.cos(angleSNav* Math.PI / 180 - Math.PI/2)
                     this.y += 4 * Math.sin(angleSNav* Math.PI / 180 - Math.PI/2)
+                    xNav=this.x
+                    yNav=this.y
                 }
             }
 
@@ -194,9 +200,8 @@
 			ctx.fillStyle="transparent"
             ctx.drawImage(img, 0, 0,W,H);
             ctx.fillRect(0, 0, W, H);
-            checkCollisionsShot();
             checkCollisions();
-            checkCollisionsAsteroides();
+            checkCollisionsShot();
             // draw & update
             a.forEach(asteroide => {
                 asteroide.draw();
@@ -283,6 +288,9 @@
             //set asteroides
             a=new Array
             let list = [60, 30]
+            angleS=0
+            n.push(new Nav (W/2,H/2,30,'orange'))
+
             function createAsteroides(){ 
                 for (let i = 0; i < 5; i++) {
                 let x = Math.floor(Math.random() * (1 - 0 + 1)) + 0;
@@ -291,15 +299,18 @@
                 // randomposition (inside Canvas)
                 let xInit = 20 + Math.random() * (W - 2 * 20);
                 let yInit = 20 + Math.random() * (H - 2 * 20);
+                while(xInit==xNav && yInit==yNav){
+                    xInit=20 + Math.random() * (W - 2 * 20);
+                    yInit = 20 + Math.random() * (H - 2 * 20);
+
+                }
                 // randomdirection
                 let direction = Math.random() * 2 * Math.PI;
                 a.push(new Asteroides(xInit, yInit, radius, direction, color))
                 }
             }
             createAsteroides()
-            setInterval(createAsteroides,30000)
-            angleS=0
-            n.push(new Nav (W/2,H/2,30,'orange'))
+            setInterval(createAsteroides,20000)
         }
         function checkCollision(a, n) {
         // verifica colisão entre 1 inimigo e 1 bala
@@ -325,6 +336,8 @@
                         //sinaliza futura remoção da bala
                         lifes.innerHTML-=1
                         if(lifes.innerHTML=="1"){
+                            a[i].dX=-a[i].dX
+                            a[i].dY=-a[i].dY
                             n=[]
                             setTimeout(n.push(new Nav (W/2,H/2,30,'orange')),40000)
                         }
@@ -345,6 +358,12 @@
             //console.log(directionBullet);
             b.push(new Bullets(xBullet,yBullet,radiusBullet,directionBullet))
         }
+        function newAsteroides(x,y,r,c){
+            let d = Math.random() * 2 * Math.PI;
+            a.push(new Asteroides(x-100,y-100,r-30,d,c))
+            a.push(new Asteroides(x+100,y+100,r-30,-d,c))
+
+        }
         //check colisions between asteroide and shot
         function checkCollisionShot(asteroide, bullet) {
         
@@ -355,6 +374,8 @@
         if (distance < asteroide.R + bullet.r) {
             if(asteroide.R=="60"){
                 points.innerHTML=+points.innerHTML+30
+                setTimeout(newAsteroides(asteroide.x,asteroide.y,asteroide.R,asteroide.c),1000)
+                
             }
             else{
                 points.innerHTML=+points.innerHTML+15
@@ -372,32 +393,6 @@
                 checkCollisionShot(a[i], b[j])
             }
         }
-
-        //check colisions between 2 asteroides
-        function checkCollisionAsteroide(asteroide1, asteroide2) {
-        
-        var dx = (asteroide1.x + asteroide1.R) - (asteroide2.x + asteroide2.R);
-        var dy = (asteroide1.y + asteroide1.R) - (asteroide2.y + asteroide2.R);
-        var distance = Math.sqrt(dx * dx + dy * dy);
-
-        if (distance < asteroide1.R + asteroide2.r) {
-            asteroide1.x-=20
-            asteroide1.y-=20 
-            asteroide2.x-=20 
-            asteroide2.y-=20
-        }
-    }
-
-        function checkCollisionsAsteroides() {
-            //percorre o array de inimigos 
-            for (let i = 0; i < a.length; i++) {
-                //percorre o array de inimigos 
-                for (let j = 0; j <a.length; j++)
-                checkCollisionAsteroide(a[i], a[j])
-            }
-        }
-
-
 	</script>
 </body>
 </html>
