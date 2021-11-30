@@ -132,9 +132,9 @@
             updateN(){
                 //update position
                 if (rightKey && this.x + this.r < W)
-                angleSNav++ ;
+                angleSNav+=3 ;
                 if (leftKey && this.x - this.r > -this.r)
-                angleSNav--;
+                angleSNav-=3;
                 if (upKey )
                 {
                     this.x += 4 * Math.cos(angleSNav* Math.PI / 180 - Math.PI/2)
@@ -149,8 +149,8 @@
             constructor(x,y,r,d){
                 this.x=x;
                 this.y=y;
-                this.dX=4 * Math.cos(d - Math.PI/2)
-                this.dY=4 * Math.sin(d - Math.PI/2)
+                this.dX=6 * Math.cos(d - Math.PI/2)
+                this.dY=6 * Math.sin(d - Math.PI/2)
                 this.c='orange'
                 this.r=r
             }
