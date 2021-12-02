@@ -57,6 +57,7 @@
                
                 this.c = c; // color
                 this.R = r; // circle radius(constant)
+                this.life='active'
             }
 
             draw() {
@@ -153,6 +154,7 @@
                 this.dY=4 * Math.sin(d - Math.PI/2)
                 this.c='orange'
                 this.r=r
+                this.life='active'
             }
             drawB(){
                 ctx.fillStyle=this.c
@@ -200,8 +202,13 @@
 			ctx.fillStyle="transparent"
             ctx.drawImage(img, 0, 0,W,H);
             ctx.fillRect(0, 0, W, H);
-            checkCollisions();
+            //check collisions between bullet and asteroide
             checkCollisionsShot();
+            getPoints();
+            a=a.filter(asteroide=>asteroide.life!='dead')
+            b=b.filter(bullet=>bullet.life!='dead')
+            checkCollisions()
+            checkCollisionsAsteroides()
             // draw & update
             a.forEach(asteroide => {
                 asteroide.draw();
@@ -312,6 +319,23 @@
             createAsteroides()
             setInterval(createAsteroides,20000)
         }
+        function createBullet(){
+            let xBullet=n[0].x
+            let yBullet=n[0].y
+            let radiusBullet=5
+            let directionBullet = angleSNav * Math.PI / 180;
+            xBullet += Math.cos(directionBullet - Math.PI/2) *30
+            yBullet += Math.sin(directionBullet- Math.PI/2) *30
+            //console.log(directionBullet);
+            b.push(new Bullets(xBullet,yBullet,radiusBullet,directionBullet))
+        }
+        function newAsteroides(x,y,r,c){
+            let d = Math.random() * 2 * Math.PI;
+            a.push(new Asteroides(x-100,y-100,r-30,d,c))
+            a.push(new Asteroides(x+100,y+100,r-30,-d,c))
+
+        }
+
         function checkCollision(a, n) {
         // verifica colisão entre 1 inimigo e 1 bala
         var dx = (a.x + a.R) - (n.x + n.r);
@@ -320,11 +344,11 @@
 
         if (distance < a.R + n.r) {
             return true;
-        }
+            }
         else{
             return false;
+            }
         }
-    }
 
         function checkCollisions() {
             //percorre o array de inimigos 
@@ -348,51 +372,81 @@
                     }
             }
         }
-        function createBullet(){
-            let xBullet=n[0].x
-            let yBullet=n[0].y
-            let radiusBullet=5
-            let directionBullet = angleSNav * Math.PI / 180;
-            xBullet += Math.cos(directionBullet - Math.PI/2) *30
-            yBullet += Math.sin(directionBullet- Math.PI/2) *30
-            //console.log(directionBullet);
-            b.push(new Bullets(xBullet,yBullet,radiusBullet,directionBullet))
-        }
-        function newAsteroides(x,y,r,c){
-            let d = Math.random() * 2 * Math.PI;
-            a.push(new Asteroides(x-100,y-100,r-30,d,c))
-            a.push(new Asteroides(x+100,y+100,r-30,-d,c))
 
-        }
+
         //check colisions between asteroide and shot
-        function checkCollisionShot(asteroide, bullet) {
+    function checkCollisionShot(asteroide, bullet) {
         
         var dx = (asteroide.x + asteroide.R) - (bullet.x + bullet.r);
         var dy = (asteroide.y + asteroide.R) - (bullet.y + bullet.r);
         var distance = Math.sqrt(dx * dx + dy * dy);
 
         if (distance < asteroide.R + bullet.r) {
-            if(asteroide.R=="60"){
-                points.innerHTML=+points.innerHTML+30
-                setTimeout(newAsteroides(asteroide.x,asteroide.y,asteroide.R,asteroide.c),1000)
-                
-            }
-            else{
-                points.innerHTML=+points.innerHTML+15
-            }
-            b=b.filter(b=>b.x!=bullet.x);
-            a=a.filter(a=>a.x!=asteroide.x)
+           return true
+        }
+        else{
+            return false
         }
     }
 
-        function checkCollisionsShot() {
-            //percorre o array de inimigos 
-            for (let i = 0; i < a.length; i++) {
-                //percorre o array de balas 
-                for (let j = 0; j <b.length; j++)
-                checkCollisionShot(a[i], b[j])
-            }
+    function checkCollisionsShot() {
+        //percorre o array de inimigos 
+        for (let i = 0; i < a.length; i++) {
+        //percorre o array de balas 
+        for (let j = 0; j < b.length; j++)
+          //verifica se há colisão entre dois objetos (1 inimigo e 1 bala)
+          if (checkCollisionShot(a[i], b[j])) {
+            //sinaliza futura remoção da bala
+            b[j].life = "dead";
+            //sinaliza futura remoção do inimigo
+            a[i].life = "dead";
+          }
+      }
+            
+    }
+    function getPoints(){
+       if(a.find(asteroide=>asteroide.life=='dead')){
+           let deadAsteroide=a.find(asteroide=>asteroide.life=='dead')
+           if (deadAsteroide.R==60){
+            points.innerHTML= +points.innerHTML+30
+            let d = Math.random() * 2 * Math.PI;
+            a.push(new Asteroides(deadAsteroide.x-50,deadAsteroide.y-50,deadAsteroide.R-30,d,deadAsteroide.c))
+            a.push(new Asteroides(deadAsteroide.x+50,deadAsteroide.y+50,deadAsteroide.R-30,-d,deadAsteroide.c))
+           }
+           else{
+            points.innerHTML= +points.innerHTML+15
+           }
+       }
+    }
+
+    function checkCollisionAsteroide(asteroide1,asteroide2){
+        var dx = (asteroide1.x + asteroide1.R) - (asteroide2.x + asteroide2.R);
+        var dy = (asteroide1.y + asteroide1.R) - (asteroide2.y + asteroide2.R);
+        var distance = Math.sqrt(dx * dx + dy * dy);
+
+        if (distance < asteroide1.R + asteroide2.R) {
+           return true
         }
+        else{
+            return false
+        }
+    }
+
+    function checkCollisionsAsteroides(){
+         //percorre o array de inimigos 
+         for (let i = 0; i < a.length; i++) {
+        //percorre o array de balas 
+        for (let j = 0; j < a.length; j++)
+          //verifica se há colisão entre dois objetos (1 inimigo e 1 bala)
+          if (checkCollisionAsteroide(a[i], a[j])) {
+           a[i].dX=-a[i].dX
+           a[i].dY=-a[i].dY
+           a[j].dX=-a[j].dX
+           a[j].dY=-a[j].dY
+           
+          }
+        }
+    }
 	</script>
 </body>
 </html>
