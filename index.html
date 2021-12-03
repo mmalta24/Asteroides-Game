@@ -11,7 +11,19 @@
 <body>
     <canvas id="myCanvas">Your browser does not support the HTML5 canvas tag. </canvas>
 	<div class="menu">
-		<h1>Asteroides</h1>
+        <svg height="150" width="400">
+            <defs>
+            <filter id="f1" x="0" y="0">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="0.6" />
+            </filter>
+            <linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color:rgb(253, 225, 165);stop-opacity:1" />
+            <stop offset="100%" style="stop-color:orange" />
+            </linearGradient>
+            </defs>
+            <text fill="url(#grad3)" font-size="50px" text-anchor="middle" font-family="Bauhaus 93"
+            alignment-baseline="central" x="50%" y="50%"  filter="url(#f1)" >Asteroides</text>
+        </svg>
 		<button id="btn">Play</button>
 		<button id="btnclose">Quit</button>
 	</div>
@@ -352,8 +364,8 @@
 
         function checkCollision(a, n) {
         // verifica colisão entre 1 inimigo e 1 bala
-        var dx = (a.x + a.R) - (n.x + n.r);
-        var dy = (a.y + a.R) - (n.y + n.r);
+        var dx = (a.x) - (n.x);
+        var dy = (a.y) - (n.y);
         var distance = Math.sqrt(dx * dx + dy * dy);
 
         if (distance < a.R + n.r) {
@@ -391,8 +403,8 @@
         //check colisions between asteroide and shot
     function checkCollisionShot(asteroide, bullet) {
         
-        var dx = (asteroide.x + asteroide.R) - (bullet.x + bullet.r);
-        var dy = (asteroide.y + asteroide.R) - (bullet.y + bullet.r);
+        var dx = (asteroide.x) - (bullet.x);
+        var dy = (asteroide.y) - (bullet.y);
         var distance = Math.sqrt(dx * dx + dy * dy);
 
         if (distance < asteroide.R + bullet.r) {
@@ -434,8 +446,8 @@
     }
 
     function checkCollisionAsteroide(asteroide1,asteroide2){
-        var dx = (asteroide1.x + asteroide1.R) - (asteroide2.x + asteroide2.R);
-        var dy = (asteroide1.y + asteroide1.R) - (asteroide2.y + asteroide2.R);
+        var dx = (asteroide1.x) - (asteroide2.x);
+        var dy = (asteroide1.y) - (asteroide2.y);
         var distance = Math.sqrt(dx * dx + dy * dy);
 
         if (distance < asteroide1.R + asteroide2.R) {

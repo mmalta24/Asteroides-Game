@@ -72,3 +72,12 @@ body{
     font-weight: bolder;
 
 }
+
+/*@font-face {
+    font-family: Bauhaus 93;
+    src: url();
+}*/
+
+svg{
+    font-family:"Bauhaus 93";
+}
