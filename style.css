@@ -42,7 +42,10 @@ body{
 }
 .menu button:hover{
     background-color: orange;
-    color:white
+    color:white;
+    font-size: 27px;
+    transition-property: font-size;
+    transition-duration: 0.2s
 }
 .submenuinfo{
     z-index: 1;
