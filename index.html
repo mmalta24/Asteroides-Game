@@ -133,16 +133,30 @@
             updateN(){
                 //update position
                 if (rightKey && this.x + this.r < W)
-                angleSNav++ ;
+                angleSNav+=2 ;
                 if (leftKey && this.x - this.r > -this.r)
-                angleSNav--;
+                angleSNav-=2 ;
                 if (upKey )
                 {
-                    this.x += 4 * Math.cos(angleSNav* Math.PI / 180 - Math.PI/2)
-                    this.y += 4 * Math.sin(angleSNav* Math.PI / 180 - Math.PI/2)
+                    this.x += 5 * Math.cos(angleSNav* Math.PI / 180 - Math.PI/2)
+                    this.y += 5 * Math.sin(angleSNav* Math.PI / 180 - Math.PI/2)
                     xNav=this.x
                     yNav=this.y
                 }
+
+                if (this.x < -this.r)
+                    this.x = W + this.r;
+
+                if (this.x > W + this.r)
+                    this.x = -this.r;
+
+                // check Canvas horizontal collisions
+                if (this.y < -this.r)
+                    this.y = H + this.r;
+
+                if (this.y > H + this.r)
+                    this.y = -this.r;                
+
             }
 
         }
@@ -150,8 +164,8 @@
             constructor(x,y,r,d){
                 this.x=x;
                 this.y=y;
-                this.dX=4 * Math.cos(d - Math.PI/2)
-                this.dY=4 * Math.sin(d - Math.PI/2)
+                this.dX=6 * Math.cos(d - Math.PI/2)
+                this.dY=6 * Math.sin(d - Math.PI/2)
                 this.c='orange'
                 this.r=r
                 this.life='active'
