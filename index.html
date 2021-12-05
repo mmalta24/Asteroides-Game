@@ -12,17 +12,12 @@
     <canvas id="myCanvas">Your browser does not support the HTML5 canvas tag. </canvas>
 	<div class="menu">
         <svg height="150" width="400">
-            <defs>
-            <filter id="f1" x="0" y="0">
-                <feGaussianBlur in="SourceGraphic" stdDeviation="0.6" />
-            </filter>
-            <linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" style="stop-color:rgb(253, 225, 165);stop-opacity:1" />
-            <stop offset="100%" style="stop-color:orange" />
+            <linearGradient id="grad3">
+                <stop/>
+                <stop />
             </linearGradient>
-            </defs>
-            <text fill="url(#grad3)" font-size="50px" text-anchor="middle" font-family="Bauhaus 93"
-            alignment-baseline="central" x="50%" y="50%"  filter="url(#f1)" >Asteroides</text>
+            <text id="titleOfGame" font-size="50px" text-anchor="middle" font-family="Bauhaus 93"
+            alignment-baseline="central" x="50%" y="50%" >Asteroides</text>
         </svg>
 		<button id="btn">Play</button>
 		<button id="btnclose">Quit</button>
@@ -31,8 +26,8 @@
         <span> Press ESC to close or Press R to restart </span>
     </div>
     <div class="submenupoints" style="visibility:hidden">
-        <span> <i class="fas fa-heart"></i> <span id="lifes"> 0 </span></span>
-        <span> <i class="fas fa-trophy"></i> <span id="points"> 0 </span></span>
+        <span> <i class="fas fa-heart" id="heart"></i> <span id="lifes"> 0 </span></span>
+        <span> <i class="fas fa-trophy" id="cup"></i> <span id="points"> 0 </span></span>
     </div>
 	<script>
 		var canvas = document.getElementById('myCanvas')
@@ -330,13 +325,13 @@
                 let radius = list[x]
                 let color = `white`;
                 // randomposition (inside Canvas)
-                let xInit = 20 + Math.random() * (W - 2 * 20);
-                let yInit = 20 + Math.random() * (H - 2 * 20);
-                while(xInit==xNav && yInit==yNav){
+                let xInit =  Math.random() * (W - 2 * 20);
+                let yInit =  Math.random() * (H - 2 * 20);
+                /*while(xInit==xNav && yInit==yNav){
                     xInit=20 + Math.random() * (W - 2 * 20);
                     yInit = 20 + Math.random() * (H - 2 * 20);
 
-                }
+                }*/
                 // randomdirection
                 let direction = Math.random() * 2 * Math.PI;
                 a.push(new Asteroides(xInit, yInit, radius, direction, color))
