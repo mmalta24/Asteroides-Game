@@ -324,21 +324,30 @@
                 let x = Math.floor(Math.random() * (1 - 0 + 1)) + 0;
                 let radius = list[x]
                 let color = `white`;
-                // randomposition (inside Canvas)
-                let xInit =  Math.random() * (W - 2 * 20);
-                let yInit =  Math.random() * (H - 2 * 20);
-                /*while(xInit==xNav && yInit==yNav){
-                    xInit=20 + Math.random() * (W - 2 * 20);
-                    yInit = 20 + Math.random() * (H - 2 * 20);
-
-                }*/
+                let xvar =  Math.floor(Math.random()* 4) + 1
+                let xInit = 0
+                let yInit = 0
+                if (xvar == 1) {
+                    xInit = 0
+                    yInit = Math.random() * (H - 2 * 20);
+                } else if(xvar == 2){
+                    xInit = W
+                    yInit = Math.random() * (H - 2 * 20);
+                }else if(xvar == 3){
+                    yInit = 0
+                    xInit = Math.random() * (W - 2 * 20);
+                }else {
+                    yInit = H
+                    xInit = Math.random() * (W - 2 * 20);
+                }
+                
                 // randomdirection
                 let direction = Math.random() * 2 * Math.PI;
                 a.push(new Asteroides(xInit, yInit, radius, direction, color))
                 }
             }
             createAsteroides()
-            setInterval(createAsteroides,20000)
+            setInterval(createAsteroides,12000)
         }
         function createBullet(){
             let xBullet=n[0].x
@@ -381,10 +390,9 @@
                         //sinaliza futura remoção da bala
                         lifes.innerHTML-=1
                         if(lifes.innerHTML=="1"){
-                            a[i].dX=-a[i].dX
-                            a[i].dY=-a[i].dY
+                            a=[]
                             n=[]
-                            setTimeout(n.push(new Nav (W/2,H/2,30,'orange')),40000)
+                            setTimeout(n.push(new Nav (W/2,H/2,30,'red')),40000)
                         }
                         else if(lifes.innerHTML=="0"){
                         stopGame=true
