@@ -495,10 +495,10 @@
                         else if(lifes==0){
                         stopGame=true
                         n=[]
-                        let highScore=document.querySelector("#hightScore")
+                        let scoreFinal=document.querySelector("#points")
                         let bestPoints=JSON.parse(localStorage.getItem('highScore'))
-                        if(+highScore.innerHTML>+bestPoints){
-                            localStorage.setItem('highScore', JSON.stringify(highScore.innerHTML))
+                        if((+scoreFinal.innerHTML)>(+bestPoints)){
+                            localStorage.setItem('highScore', JSON.stringify(scoreFinal.innerHTML))
                         }
                         
                         }
