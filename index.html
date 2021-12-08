@@ -353,21 +353,32 @@
                 ctx.fillText("GAME OVER!!", W / 2, H / 2);
             }
         }
+        function setHightScore(){
+            let highScore=document.querySelector("#hightScore")
+            let bestPoints=JSON.parse(localStorage.getItem('highScore'))
+            if(bestPoints==null){
+                highScore.innerHTML="0"
+            }
+            else{
+                highScore.innerHTML=`${bestPoints}`
+            }
+        }
         init();
         render();
+        setHightScore()
+        let lifes=2
 
         function startGame(){
             let title=document.querySelector("#svgTitle")
             title.style.visibility='hidden'
             let info=document.querySelector("#svgInfo")
             info.style.visibility='hidden'
-            let hearts=document.querySelector("#lifes")
             let points=document.querySelector("#points")
             let score=document.querySelector(".score")
             score.style.visibility="visible"
             let infoLeave=document.querySelector(".info")
             infoLeave.style.visibility="visible"
-            let lifes=2
+           
             //set events for keys
             window.addEventListener('keydown', e => {
             if (e.key == 'ArrowRight')
@@ -475,6 +486,7 @@
                         //sinaliza futura remoção da bala
                         lifes=lifes-1
                         if(lifes==1){
+                            let hearts=document.querySelector("#lifes")
                             hearts.innerHTML=` <span id="lifes"> <i class="fas fa-heart"></i>`
                             a=[]
                             n=[]
@@ -483,6 +495,12 @@
                         else if(lifes==0){
                         stopGame=true
                         n=[]
+                        let highScore=document.querySelector("#hightScore")
+                        let bestPoints=JSON.parse(localStorage.getItem('highScore'))
+                        if(+highScore.innerHTML>+bestPoints){
+                            localStorage.setItem('highScore', JSON.stringify(highScore.innerHTML))
+                        }
+                        
                         }
                     }
             }
