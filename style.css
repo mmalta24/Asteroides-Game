@@ -12,12 +12,16 @@ body {
       position: relative;
       z-index: -1;
   }
+  @font-face {
+	font-family: 'Death Star';
+	src: 
+		url('font/Death Star.otf')
+}
   #svgTitle{
       position: absolute;
       top: 30%;
       font-size: 50px;
       font-family: "Death Star";
-  
   }
   
   #titleOfGame{
