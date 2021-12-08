@@ -14,7 +14,7 @@
         
     </div>
    <div class="hightscore">
-       <p>HIGHT SCORE: <span id="hightScore">0</span></p>
+       <p>HIGH SCORE: <span id="hightScore">0</span></p>
    </div>
     <svg width="300px" height="250px" id="svgTitle"> 
         <linearGradient id="grad3">
@@ -58,7 +58,7 @@
         //position nav
         let xNav=0, yNav=0
 
-        //Class estrelas do wallpaper
+        //Class star do wallpaper
 
         class Star {
             constructor(x, y, width, speed){
@@ -294,11 +294,11 @@
             }
         })
 
-        let a = new Array();
-        let n= new Array();
-        let b=new Array();
-        let stopGame=false
-        let list = [60, 30] 
+        let a = new Array(); //set array of asteroides
+        let n= new Array(); //set array of nave
+        let b=new Array(); //set array of balas
+        let stopGame=false //variavel que permite parar a animação (game over)
+        let list = [60, 30] //lista com o tamanho dos asteroides(raio)
         for (let i = 0; i < 10; i++) {
             let x = Math.floor(Math.random() * (1 - 0 + 1)) + 0;
             let radius = list[x]
@@ -324,7 +324,7 @@
             getPoints();
             a=a.filter(asteroide=>asteroide.life!='dead')
             b=b.filter(bullet=>bullet.life!='dead')
-            checkCollisions()
+            checkCollisions() //check collisions between nav and asteroide
             // draw & update
             a.forEach(asteroide => {
                 asteroide.draw();
@@ -363,11 +363,12 @@
                 highScore.innerHTML=`${bestPoints}`
             }
         }
-        init();
+        init(); //create stars
         render();
         setHightScore()
         let lifes=2
 
+        // funçao que inicia o jogo
         function startGame(){
             let title=document.querySelector("#svgTitle")
             title.style.visibility='hidden'
@@ -385,7 +386,6 @@
                 rightKey = true;
             if (e.key == 'ArrowLeft')
                 leftKey = true;
-
             if (e.key == 'ArrowDown')
                 downKey = true;
             if (e.key == 'ArrowUp')
@@ -452,7 +452,6 @@
             let directionBullet = angleSNav * Math.PI / 180;
             xBullet += Math.cos(directionBullet - Math.PI/2) *30
             yBullet += Math.sin(directionBullet- Math.PI/2) *30
-            //console.log(directionBullet);
             b.push(new Bullets(xBullet,yBullet,radiusBullet,directionBullet))
         }
         function newAsteroides(x,y,r,c){
@@ -463,7 +462,7 @@
         }
 
         function checkCollision(a, n) {
-        // verifica colisão entre 1 inimigo e 1 bala
+        // verifica colisão entre 1 asteroide e a nav
         var dx = (a.x) - (n.x);
         var dy = (a.y) - (n.y);
         var distance = Math.sqrt(dx * dx + dy * dy);
@@ -479,11 +478,9 @@
         function checkCollisions() {
             //percorre o array de inimigos 
             for (let i = 0; i < a.length; i++) {
-                //percorre o array de balas 
                 for (let j = 0; j <n.length; j++)
-                    //verifica se há colisão entre dois objetos (1 inimigo e 1 bala)
+                    //verifica se há colisão entre dois objetos
                     if (checkCollision(a[i], n[j])) {
-                        //sinaliza futura remoção da bala
                         lifes=lifes-1
                         if(lifes==1){
                             let hearts=document.querySelector("#lifes")
