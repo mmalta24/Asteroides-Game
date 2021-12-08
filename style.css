@@ -1,138 +1,118 @@
-canvas{
-    position: fixed;
-    top:0px;
-    left: 0px;
-}
-body{
-    width:98vw;
-    height: 96vh;
+body {
+    background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+    margin: 0;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
     display: flex;
     justify-content: center;
-    align-items: center;
     user-select: none;
-}
-.menu{
-    z-index: 1;
-    position: relative;
-    color:white;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-color: rgba(255, 255, 255, 0.116);
-    padding: 2%;
-    border-radius: 2%;
-    width:25vw
-}
-.menu, h1,button{
-    margin:6%
-}
-.menu h1{
-    font-family: "Bauhaus 93";
-    font-size: 50px;
-}
-.menu button{
-    background-color: white;
-    font-weight: bold;
-    border:none;
-    width: 50%;
-    height: 5vh;
-    border-radius: 2%;
-    font-size: 20px;
-}
-.menu button:hover{
-    background-color: orange;
-    color:white;
-    font-size: 27px;
-    transition-property: font-size;
-    transition-duration: 0.2s
-}
-.submenuinfo{
-    z-index: 1;
-    position: fixed;
-    top:0px;
-    left:0px;
-    color:white;
-    background-color: rgba(255, 255, 255, 0.116);
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    border-radius: 4%;
-    padding: 0.5%;
-}
-.submenupoints{
-    z-index:1;
-    position:fixed;
-    top:0px;
-    right:0px;
-    color:white;
-    background-color: rgba(255, 255, 255, 0.116);
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    border-radius: 0.5%;
-    padding: 0.5%;
-    font-size: 30px;
-    font-weight: bolder;
-
-}
-#heart{
-    animation-duration: 1.5s;
-    animation-name: heartBeat;
-    animation-direction: alternate;
-    animation-iteration-count: infinite;
-    animation-timing-function: linear;
-}
-@keyframes heartBeat {
-    to{
-        color: red;
-    }
-    from{
-        color: rgba(255, 0, 0, 0.658);
-    }
-}
-#cup{
-    color:#FFD32C;
-}
-
-svg{
-    font-family:"Bauhaus 93";
-}
-#titleOfGame{
-    fill:url("#grad3");
-}
-#grad3 stop:first-child{
-    animation-duration: 5s;
-    animation-name: changeColor1;
-    animation-direction: alternate;
-    animation-iteration-count: infinite;
-    animation-timing-function: linear;
-}
-#grad3 stop:last-child{
-    animation-duration: 5s;
-    animation-name: changeColor2;
-    animation-direction: alternate;
-    animation-iteration-count: infinite;
-    animation-timing-function: linear;
-}
-
-
-@keyframes changeColor1 {
-    to{
-        offset:0%;
-        stop-color: rgb(253, 225, 165);
-    }
-    from{
-        offset:100%;
-        stop-color: orange;
-    }
-}
-@keyframes changeColor2 {
-    to{
-        offset:100%;
-        stop-color: orange;
-    }
-    from{
-        offset:0%;
-        stop-color: rgb(253, 225, 165);
-    }
-}
+  }
+  canvas{
+      position: relative;
+      z-index: -1;
+  }
+  #svgTitle{
+      position: absolute;
+      top: 30%;
+      font-size: 50px;
+      font-family: "Death Star";
+  
+  }
+  
+  #titleOfGame{
+      fill:url("#grad3");
+  }
+  #grad3 stop:first-child{
+      animation-duration: 5s;
+      animation-name: changeColor1;
+      animation-direction: alternate;
+      animation-iteration-count: infinite;
+      animation-timing-function: linear;
+  }
+  #grad3 stop:last-child{
+      animation-duration: 5s;
+      animation-name: changeColor2;
+      animation-direction: alternate;
+      animation-iteration-count: infinite;
+      animation-timing-function: linear;
+  }
+  
+  
+  @keyframes changeColor1 {
+      to{
+          offset:0%;
+          stop-color: rgb(253, 225, 165);
+      }
+      from{
+          offset:100%;
+          stop-color: orange;
+      }
+  }
+  @keyframes changeColor2 {
+      to{
+          offset:100%;
+          stop-color: orange;
+      }
+      from{
+          offset:0%;
+          stop-color: rgb(253, 225, 165);
+      }
+  }
+  
+  #svgInfo{
+      position: absolute;
+      top: 50%;
+      font-size: 25px;
+      font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      
+  }
+  #infoToStart{
+      animation-duration: 1s;
+      animation-name: changeColor3;
+      animation-direction: alternate;
+      animation-iteration-count: infinite;
+      animation-timing-function: linear;
+  }
+  
+  @keyframes changeColor3 {
+      to{
+          fill:white
+      }
+      from{
+          fill:#1B2735
+      }
+  }
+  .hightscore{
+      position: absolute;
+      top: 0%;
+      font-size: 25px;
+      font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color:white
+  
+  }
+  .score{
+      position: absolute;
+      top: 0%;
+      left:0%;
+      font-size: 25px;
+      font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color:white;
+      margin-left: 1%;
+  
+  }
+  .info{
+      position: absolute;
+      top: 0%;
+      right:0%;
+      font-size: 25px;
+      font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color:white;
+      margin-right: 1%;
+      
+  
+  }
+  
 
 
 

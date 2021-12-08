@@ -4,67 +4,106 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Asteroides</title>
+    <title>Asteroides-Arcade Game</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
 </head>
 <body>
-    <canvas id="myCanvas">Your browser does not support the HTML5 canvas tag. </canvas>
-	<div class="menu">
-        <svg height="150" width="400">
-            <linearGradient id="grad3">
-                <stop/>
-                <stop />
-            </linearGradient>
-            <text id="titleOfGame" font-size="50px" text-anchor="middle" font-family="Bauhaus 93"
-            alignment-baseline="central" x="50%" y="50%" >Asteroides</text>
-        </svg>
-		<button id="btn">Play</button>
-		<button id="btnclose">Quit</button>
-	</div>
-    <div class="submenuinfo" style="visibility:hidden">
-        <span> Press ESC to close or Press R to restart </span>
+    <div class="score" style="visibility: hidden;">
+        <p>SCORE: <span id="points">0</span> <span id="lifes"> <i class="fas fa-heart"></i> <i class="fas fa-heart"></i></span></p>
+        
     </div>
-    <div class="submenupoints" style="visibility:hidden">
-        <span> <i class="fas fa-heart" id="heart"></i> <span id="lifes"> 0 </span></span>
-        <span> <i class="fas fa-trophy" id="cup"></i> <span id="points"> 0 </span></span>
+   <div class="hightscore">
+       <p>HIGHT SCORE: <span id="hightScore">0</span></p>
+   </div>
+    <svg width="300px" height="250px" id="svgTitle"> 
+        <linearGradient id="grad3">
+            <stop/>
+            <stop />
+        </linearGradient>
+        <text x="0" y="50" id="titleOfGame">Asteroides</text>
+    </svg>
+    <svg width="700px" height="250px" id="svgInfo">
+        <text x="194" y="20" id="infoToStart">Press ENTER to start game</text>
+    </svg>
+    <div class="info" style="visibility: hidden;">
+        <p>PRESS <span style="font-weight: 500;"> ESC </span>TO QUIT</span></p>
     </div>
-	<script>
-		var canvas = document.getElementById('myCanvas')
-        //set canvas in full page
-        canvas.width  = window.innerWidth;
-        canvas.height = window.innerHeight
-		var ctx = canvas.getContext('2d');
-		const W = canvas.width;
-        const H = canvas.height;
-		let img = new Image();
-		img.src = 'https://i.ytimg.com/vi/y2_2Lcl5Iow/maxresdefault.jpg';
-		ctx.drawImage(img, 0, 0,W,H);
-        //set keys value
-        let rightKey = false, leftKey = false, upKey = false, downKey = false, spaceKey=false;
+
+    <canvas id="myCanvas"></canvas>
+    
+
+
+
+    <script>
+        // canvas setup
+        const canvas = document.querySelector('#myCanvas');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        let W=canvas.width
+        let H=canvas.height
+        const ctx = canvas.getContext('2d');
+
+        // watch for browser resizing, reinitialize stars
+        window.addEventListener('resize', function() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        W=canvas.width
+        H=canvas.height
+        init();
+        });
+
+         //set keys value
+         let rightKey = false, leftKey = false, upKey = false, downKey = false, spaceKey=false;
         //position nav
         let xNav=0, yNav=0
-        //load page
-		class Asteroides {
+
+        //Class estrelas do wallpaper
+
+        class Star {
+            constructor(x, y, width, speed){
+            this.x = x;
+            this.y = y;
+            this.width = width;
+            this.speed = speed;
+            this.color = "#fff";
+            }
+  
+            drawS(){
+            ctx.fillStyle = this.color;
+            ctx.fillRect(this.x, this.y, this.width, this.width);
+            }
+
+            updateS(){
+            // check bounds
+            if (this.x + this.width > innerWidth) {
+                this.x = 0;
+            }
+            this.x += this.speed;
+
+            this.drawS();
+            }
+        }
+
+        class Asteroides {
             constructor(x, y, r, d, c) { // CONSTRUCTOR
-                this.x = x; // initial X position
-                this.y = y; // initial Y position
-                if(r=="60"){
-                     // (constant) horizontal displacement(velocity): d is a direction angle
-                    this.dX = 2 * Math.cos(d);
-                    // (constant) vertical displacement (velocity): d is a direction angle
-                    this.dY = 2 * Math.sin(d);
-                }
-                else{
-                     // (constant) horizontal displacement(velocity): d is a direction angle
-                    this.dX = 5 * Math.cos(d);
-                    // (constant) vertical displacement (velocity): d is a direction angle
-                    this.dY = 5 * Math.sin(d);
-                }
-               
-                this.c = c; // color
-                this.R = r; // circle radius(constant)
-                this.life='active'
+            this.x = x; // initial X position
+            this.y = y; // initial Y position
+            if(r=="60"){
+                // (constant) horizontal displacement(velocity): d is a direction angle
+                this.dX = 2 * Math.cos(d);
+                // (constant) vertical displacement (velocity): d is a direction angle
+                this.dY = 2 * Math.sin(d);
+            }
+            else{
+                // (constant) horizontal displacement(velocity): d is a direction angle
+                this.dX = 5 * Math.cos(d);
+                // (constant) vertical displacement (velocity): d is a direction angle
+                this.dY = 5 * Math.sin(d);
+            }
+            this.c = c; // color
+            this.R = r; // circle radius(constant)
+            this.life='active'
             }
 
             draw() {
@@ -92,14 +131,13 @@
             }
 
             update() {
-               // check Canvas vertical collisions
+               // check Canvas collisions
                 if (this.x < -this.R)
                     this.x = W + this.R;
 
                 if (this.x > W + this.R)
                     this.x = -this.R;
 
-                // check Canvas horizontal collisions
                 if (this.y < -this.R)
                     this.y = H + this.R;
 
@@ -111,6 +149,7 @@
 
             }
         }
+
         class Nav{
             constructor(x,y,r,c){
                 this.x=x;
@@ -151,13 +190,13 @@
                     yNav=this.y
                 }
 
+                //check collisions
                 if (this.x < -this.r)
                     this.x = W + this.r;
 
                 if (this.x > W + this.r)
                     this.x = -this.r;
 
-                // check Canvas horizontal collisions
                 if (this.y < -this.r)
                     this.y = H + this.r;
 
@@ -167,6 +206,7 @@
             }
 
         }
+
         class Bullets{
             constructor(x,y,r,d){
                 this.x=x;
@@ -200,12 +240,66 @@
 
             }
         }
+        //set some variables
+        
+
+        // Star dimensions and speed
+        const stars = {
+            nearStar : {
+                width : 3,
+                speed : 0.2
+            },
+            midStar : {
+                width : 2,
+                speed : 0.1
+            },
+            farStar : {
+                width : 1,
+                speed : 0.025
+            }
+        };
+
+        let starArray = [];
+
+        // clear starArray and generate 3 layers of stars randomly
+        function init() {
+
+        starArray = [];
+        // nearest stars
+        for (let i=0; i < 50; ++i) {
+        const x = Math.random() * (innerWidth - stars.nearStar.width);
+        const y = Math.random() * (innerHeight - stars.nearStar.width);
+        starArray.push(new Star(x, y, stars.nearStar.width, stars.nearStar.speed));
+        }
+
+        // mid-distance stars
+        for (let i=0; i < 100; ++i) {
+        const x = Math.random() * (innerWidth - stars.midStar.width);
+        const y = Math.random() * (innerHeight - stars.midStar.width);
+        starArray.push(new Star(x, y, stars.midStar.width, stars.midStar.speed));
+        }
+
+        // farthest stars
+        for (let i=0; i < 350; ++i) {
+        const x = Math.random() * (innerWidth - stars.farStar.width);
+        const y = Math.random() * (innerHeight - stars.farStar.width);
+        starArray.push(new Star(x, y, stars.farStar.width, stars.farStar.speed));
+            }
+        }
+        let enter="Enter"
+        window.addEventListener('keydown', e => {
+            if(e.key==enter){
+                startGame()
+                enter="123"
+            }
+        })
+
         let a = new Array();
         let n= new Array();
         let b=new Array();
         let stopGame=false
         let list = [60, 30] 
-        for (let i = 0; i < 25; i++) {
+        for (let i = 0; i < 10; i++) {
             let x = Math.floor(Math.random() * (1 - 0 + 1)) + 0;
             let radius = list[x]
             let color = `white`;
@@ -218,18 +312,19 @@
         }
         let angleS=0
         let angleSNav=0
+
+        // loop to call update function on each star
         function render() {
-            // fade Canvas
-			ctx.fillStyle="transparent"
-            ctx.drawImage(img, 0, 0,W,H);
-            ctx.fillRect(0, 0, W, H);
+            ctx.clearRect(0, 0, innerWidth, innerHeight);
+            for (var star of starArray) {
+                star.updateS();
+            }
             //check collisions between bullet and asteroide
             checkCollisionsShot();
             getPoints();
             a=a.filter(asteroide=>asteroide.life!='dead')
             b=b.filter(bullet=>bullet.life!='dead')
             checkCollisions()
-            checkCollisionsAsteroides()
             // draw & update
             a.forEach(asteroide => {
                 asteroide.draw();
@@ -255,32 +350,24 @@
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
                 ctx.font = 'bold 40px arial';
-                ctx.fillText("YOU LOST!!", W / 2, H / 2);
+                ctx.fillText("GAME OVER!!", W / 2, H / 2);
             }
         }
-        render(); //startthe animation
-        
-        //listen events of menu
-		let btn=document.querySelector("#btn")
-		btn.addEventListener("click",function(){
-			startGame()
-		}) 
-        let btnClose=document.querySelector("#btnclose")
-        btnClose.addEventListener("click",function(){
-            window.open("", '_self').window.close();
-        }) 
-        //startGame
-         // on key DOWN, check if it is an arrow, and signal the corresponding flag
+        init();
+        render();
+
         function startGame(){
-            let menu=document.querySelector(".menu")
-            menu.style.visibility='hidden'
-            let submenuinfo=document.querySelector(".submenuinfo")
-            submenuinfo.style.visibility='visible'
-            let submenupoints=document.querySelector(".submenupoints")
-            submenupoints.style.visibility='visible'
-            let lifes=document.querySelector("#lifes")
+            let title=document.querySelector("#svgTitle")
+            title.style.visibility='hidden'
+            let info=document.querySelector("#svgInfo")
+            info.style.visibility='hidden'
+            let hearts=document.querySelector("#lifes")
             let points=document.querySelector("#points")
-            lifes.innerHTML=2
+            let score=document.querySelector(".score")
+            score.style.visibility="visible"
+            let infoLeave=document.querySelector(".info")
+            infoLeave.style.visibility="visible"
+            let lifes=2
             //set events for keys
             window.addEventListener('keydown', e => {
             if (e.key == 'ArrowRight')
@@ -294,8 +381,6 @@
                 upKey = true;
             if (e.key == ' ')
                 createBullet()
-            if (e.key=='r')
-                lifes.innerHTML=2,points.innerHTML=0,n=[],b=[],a=[],startGame();
             if (e.key=="Escape")
                 location.reload()
             e.preventDefault();
@@ -388,13 +473,14 @@
                     //verifica se há colisão entre dois objetos (1 inimigo e 1 bala)
                     if (checkCollision(a[i], n[j])) {
                         //sinaliza futura remoção da bala
-                        lifes.innerHTML-=1
-                        if(lifes.innerHTML=="1"){
+                        lifes=lifes-1
+                        if(lifes==1){
+                            hearts.innerHTML=` <span id="lifes"> <i class="fas fa-heart"></i>`
                             a=[]
                             n=[]
                             setTimeout(n.push(new Nav (W/2,H/2,30,'red')),40000)
                         }
-                        else if(lifes.innerHTML=="0"){
+                        else if(lifes==0){
                         stopGame=true
                         n=[]
                         }
@@ -404,21 +490,20 @@
 
 
         //check colisions between asteroide and shot
-    function checkCollisionShot(asteroide, bullet) {
-        
-        var dx = (asteroide.x) - (bullet.x);
-        var dy = (asteroide.y) - (bullet.y);
-        var distance = Math.sqrt(dx * dx + dy * dy);
+        function checkCollisionShot(asteroide, bullet) {
+            var dx = (asteroide.x) - (bullet.x);
+            var dy = (asteroide.y) - (bullet.y);
+            var distance = Math.sqrt(dx * dx + dy * dy);
 
-        if (distance < asteroide.R + bullet.r) {
-           return true
+            if (distance < asteroide.R + bullet.r) {
+                return true
+            }
+            else{
+                return false
+            }
         }
-        else{
-            return false
-        }
-    }
 
-    function checkCollisionsShot() {
+        function checkCollisionsShot() {
         //percorre o array de inimigos 
         for (let i = 0; i < a.length; i++) {
         //percorre o array de balas 
@@ -429,12 +514,12 @@
             b[j].life = "dead";
             //sinaliza futura remoção do inimigo
             a[i].life = "dead";
-          }
-      }
+            }
+        }
             
-    }
-    function getPoints(){
-       if(a.find(asteroide=>asteroide.life=='dead')){
+        }
+        function getPoints(){
+        if(a.find(asteroide=>asteroide.life=='dead')){
            let deadAsteroide=a.find(asteroide=>asteroide.life=='dead')
            if (deadAsteroide.R==60){
             points.innerHTML= +points.innerHTML+30
@@ -445,37 +530,10 @@
            else{
             points.innerHTML= +points.innerHTML+15
            }
-       }
-    }
-
-    function checkCollisionAsteroide(asteroide1,asteroide2){
-        var dx = (asteroide1.x) - (asteroide2.x);
-        var dy = (asteroide1.y) - (asteroide2.y);
-        var distance = Math.sqrt(dx * dx + dy * dy);
-
-        if (distance < asteroide1.R + asteroide2.R) {
-           return true
         }
-        else{
-            return false
         }
-    }
+        
 
-    function checkCollisionsAsteroides(){
-         //percorre o array de inimigos 
-         for (let i = 0; i < a.length; i++) {
-        //percorre o array de balas 
-        for (let j = 0; j < a.length; j++)
-          //verifica se há colisão entre dois objetos (1 inimigo e 1 bala)
-          if (checkCollisionAsteroide(a[i], a[j])) {
-           a[i].dX=-a[i].dX
-           a[i].dY=-a[i].dY
-           a[j].dX=-a[j].dX
-           a[j].dY=-a[j].dY
-           
-          }
-        }
-    }
-	</script>
+    </script>
 </body>
 </html>
